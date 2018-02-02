@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs/observable/of';
+import { catchError, map, tap } from 'rxjs/operators';
+import 'rxjs/add/operator/map';
+
+
+@Injectable()
+export class UserService {
+
+  constructor(
+    private http: HttpClient
+  ) { }
+  login(username: string, password: string) {
+    this.http.post(`connect/token`, `grant_type=password&client_id=AngularSPA&scope=openid+offline_access+WebAPI+profile+roles&username=${username}&password=${password}`).subscribe(resp => console.log(resp));
+  }
+}
