@@ -95,12 +95,12 @@ namespace DemoBAPI.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var kv = new Dictionary<string, string>();
+            string a="";
             foreach (var clain in User.Claims)
             {
-                kv.Add(clain.Type, clain.Value);
+                a+="type:"+clain.Type+"value:" +clain.Value;
             }
-            string a = Newtonsoft.Json.JsonConvert.SerializeObject(kv);
+            
             return Ok(a);
             //return Ok(id);
         }

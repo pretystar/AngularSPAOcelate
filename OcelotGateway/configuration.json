@@ -1,12 +1,35 @@
 ﻿{
   "ReRoutes": [
     {
+      "DownstreamPathTemplate": "/demo{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamPort": 5002,
+      "DownstreamHost": "localhost",
+      "UpstreamPathTemplate": "/demo{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 3,
+        "DurationOfBreak": 10,
+        "TimeoutValue": 5000
+      },
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": false,
+        "UseCookieContainer": false
+      },
+      "AuthenticationOptions": {
+        "Provider": "IdentityServer",
+        "ProviderRootUrl": "http://localhost:5000",
+        "RequireHttps": "false",
+        "AllowedScopes": []
+      }
+    },
+    {
       "DownstreamPathTemplate": "/api/values",
       "DownstreamScheme": "http",
       "DownstreamPort": 5000,
       "DownstreamHost": "localhost",
       "UpstreamPathTemplate": "/api/values",
-      "UpstreamHttpMethod": [ "Get","Post" ],
+      "UpstreamHttpMethod": [ "Get", "Post" ],
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
         "DurationOfBreak": 10,
@@ -28,6 +51,10 @@
       "DownstreamHost": "localhost",
       "UpstreamPathTemplate": "/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
+      "HttpHandlerOptions": {
+        "AllowAutoRedirect": true,
+        "UseCookieContainer": false
+      },
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
         "DurationOfBreak": 10,

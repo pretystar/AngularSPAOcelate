@@ -58,7 +58,6 @@ namespace AngularSPAWebAPI
                     AllowedCorsOrigins = new List<string>
                     {
                         "http://localhost:5000",
-                        "chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop",
                         "*"
                     } // Only for development.
                 }
