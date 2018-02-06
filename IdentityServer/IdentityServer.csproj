@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Web\src\app\account\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

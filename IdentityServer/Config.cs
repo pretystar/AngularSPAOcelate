@@ -41,8 +41,8 @@ namespace AngularSPAWebAPI
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword, // Resource Owner Password Credential grant.
                     AllowAccessTokensViaBrowser = true,
                     RequireClientSecret = false, // This client does not need a secret to request tokens from the token endpoint.
-
-                    AccessTokenLifetime = 900, // Lifetime of access token in seconds.
+                    
+                    AccessTokenLifetime = 3600, // Lifetime of access token in seconds.
 
                     AllowedScopes = {
                         IdentityServerConstants.StandardScopes.OpenId, // For UserInfo endpoint.
@@ -52,11 +52,12 @@ namespace AngularSPAWebAPI
                     },
                     AllowOfflineAccess = true, // For refresh token.
                     RefreshTokenUsage = TokenUsage.OneTimeOnly,
-                    AbsoluteRefreshTokenLifetime = 7200,
-                    SlidingRefreshTokenLifetime = 900,
+                    //AbsoluteRefreshTokenLifetime = 7200,
+                    //SlidingRefreshTokenLifetime = 900,
                     RefreshTokenExpiration = TokenExpiration.Sliding,
                     AllowedCorsOrigins = new List<string>
                     {
+                        "http://localhost:5001",
                         "http://localhost:5000",
                         "*"
                     } // Only for development.

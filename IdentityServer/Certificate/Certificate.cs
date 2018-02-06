@@ -19,7 +19,7 @@ namespace AngularSPAWebAPI
              *  real environment the certificate should be created and stored in a secure way, which is out
              *  of the scope of this project.
              **********************************************************************************************/
-            using (var stream = assembly.GetManifestResourceStream("AngularSPAWebAPI.Certificate.idsrv3test.pfx"))
+            using (var stream = assembly.GetManifestResourceStream("IdentityServer.Certificate.idsrv3test.pfx"))
             {
                 return new X509Certificate2(ReadStream(stream), "idsrv3test");
             }

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularSPAWebAPI", "IdentityServer\AngularSPAWebAPI.csproj", "{5F4C2F6E-82DD-4C23-A8F7-5EECEAE86CC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{5F4C2F6E-82DD-4C23-A8F7-5EECEAE86CC0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OcelotGateway", "OcelotGateway\OcelotGateway.csproj", "{6F470827-8F37-4EF5-8041-3BD46B009E51}"
 EndProject

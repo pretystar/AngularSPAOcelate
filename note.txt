@@ -1,0 +1,2 @@
+1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
+2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
