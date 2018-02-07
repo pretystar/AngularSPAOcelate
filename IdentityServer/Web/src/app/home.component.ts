@@ -6,11 +6,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
-export class AppComponent implements OnInit {
+export class HomeComponent implements OnInit {
 
   constructor(private authenticationService: AuthenticationService, private http: HttpClient) { }
 
@@ -18,18 +18,8 @@ export class AppComponent implements OnInit {
   public _user: User;
 
   ngOnInit() {
-    this.authenticationService.userChanged().subscribe(
-      (user: User) => {
-        this._user = user;
-      });
-    if (this.authenticationService.checkCredentials()) {
-      this.authenticationService.getUserInfo();
-    };
+
 
   }
-
   
-
-
-
 }

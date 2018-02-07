@@ -13,7 +13,7 @@ namespace DemoBAPI.Controllers
     [Route("demobapi/[controller]")]
     public class ValuesController : Controller
     {
-        string consul = "http://localhost/v1/kv/";
+        string consul = "http://localhost:8500/v1/kv/";
         HttpClient client;
         // GET api/values
         public ValuesController():base()

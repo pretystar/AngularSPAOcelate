@@ -49,6 +49,11 @@ namespace DemoBAPI
             }
             app.UseAuthentication();
             app.UseMvc();
+            // Microsoft.AspNetCore.StaticFiles: API for starting the application from wwwroot.
+            // Uses default files as index.html.
+            app.UseDefaultFiles();
+            // Uses static file for the current path.
+            app.UseStaticFiles();
         }
     }
 }

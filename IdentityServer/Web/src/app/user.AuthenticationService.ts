@@ -50,7 +50,7 @@ export class AuthenticationService {
           localStorage.setItem("access_token", response['access_token']);
           localStorage.setItem("refresh_token", response['refresh_token']);
           //this._router.navigate(['home']);
-          this._user.next(null);
+          //this._user.next(null);
           this.getUserInfo();
         },
         (error: HttpErrorResponse) => {
@@ -131,15 +131,18 @@ export class AuthenticationService {
     return this._user.asObservable();
   }
   public getUserInfo() {
-    if (this._user.value == null) {
+    if (this._user.value["userName"] == null) {
         let contentHeaders1 = new HttpHeaders({ 'Accept': 'application/json' });
 
         this.http.get("connect/userinfo", { headers: contentHeaders1 }).subscribe(
-          (user: User) => { this._user.next(user) },
+          (user: User) => {
+            this._user.next(user)
+            return this._user.value;
+          },
           (error: HttpErrorResponse) => { console.log(error.message); }
       );
       
     }
-    return this._user.value;
+    
   }
 }

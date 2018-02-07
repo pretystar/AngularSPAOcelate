@@ -1,2 +1,19 @@
 1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
 2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
+
+ng build --output-path ..\wwwroot
+ng new Web
+
+for new project
+frontend:
+	
+	copy shared+AuthInterceptor.ts
+	npm install --save @angular/material @angular/cdk
+	npm install --save @angular/animations
+	npm install github:angular/flex-layout-builds --save
+	npm install --save hammerjs
+	npm install @angular/flex-layout --save
+for bug fix:
+	npm install @angular-devkit/core --save
+	--npm install @angular-devkit/schematics --save
+	--npm install @schematics/angular --save

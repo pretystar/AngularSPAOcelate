@@ -1,76 +1,72 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div id="header" style="text-align:center">
-  <span *ngIf="!!_user">
-    <a>
-      Welcome  {{ _user['given_name'] }}!
-    </a>
-    <button hidden="{{ !!_user }}">Sign In</button>
-    <button>Sign Up</button>
-  </span>
+<div fxLayout="column" FxLayoutAligh="start stretch">
+  <div id="header" style="text-align:center" fxFlex="70px">
+
+  </div>
+
+  <div id="main">
+
+
+    <mat-sidenav-container class="app-root" autosize>
+
+      <mat-sidenav #start mode="over">
+        <mat-nav-list>
+          <a mat-list-item routerLink="/">User Managerment</a>
+          <a mat-list-item routerLink="/">Role Managerment</a>
+          <a mat-list-item href="/demo/index.html">Consul Site Management</a>
+        </mat-nav-list>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <mat-toolbar color="primary" fxLayout="row">
+          <a mat-icon-button (click)="start.open()" fxFlex="none">
+            <mat-icon>menu</mat-icon>
+          </a>
+          <a mat-icon-button routerLink="/">
+            <mat-icon>home</mat-icon>
+          </a>
+          <span class="fill-remaining-space"></span>
+
+          <a *ngIf="_user">
+            Welcome {{ _user['given_name'] }}!
+          </a>
+          <button routerLink="/account/signin" *ngIf="!!_user">Sign In</button>
+          <button *ngIf="!!_user">Sign Up</button>
+          <button *ngIf="_user">Sign Out</button>
+
+        </mat-toolbar>
+
+        <div class="app-content" fxLayout="column" FxLayoutAligh="space-around center">
+          <router-outlet>
+            <!--<form>-->
+            <!--</form>-->
+            <!--<br />
+            <button mat-button (click)="getkeys()">Get Consul Keys</button>
+            <br />
+            <button mat-button (click)="update(value)">Update</button>
+            <br />
+            <div>
+              <mat-nav-list>
+                <a mat-list-item *ngFor="let key of keys" (click)="getvalue(key)"> {{ key }} </a>
+              </mat-nav-list>
+            </div>-->
+          </router-outlet>
+
+        </div>
+      </mat-sidenav-content>
+
+    </mat-sidenav-container>
+
+  </div>
+
+  <div id="footer" style="text-align:center; font-size: x-small;">
+    <a>Here are some links to help you start: </a><br />
+    <a target="_blank" rel="noopener" href="https://angular.io/tutorial">"Tour of Heroes"</a>
+    <a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">"CLI Documentation"</a>
+    <a target="_blank" rel="noopener" href="https://www.angular.io/">"Angular Website"</a>
+    <a target="_blank" rel="noopener" href="https://material.angular.io/">"Material Design"</a>
+    <a target="_blank" rel="noopener" href="https://github.com/angular/flex-layout/wiki/API-Documentation">"flex layout"</a>
+    <a target="_blank" rel="noopener" href="https://tburleson-layouts-demos.firebaseapp.com/#/docs">"flex layout demo"</a>
+  </div>
+
 </div>
-
-<div id="main" >
-
-  
-  <mat-sidenav-container class="app-root" autosize>
-
-    <mat-sidenav #start mode="over">
-      <mat-nav-list>
-        <a mat-list-item routerLink="/">home</a>
-        <a mat-list-item routerLink="/account/signin">Sign In</a>
-        <a mat-list-item routerLink="/account/signup">Sign Up</a>
-        <a mat-list-item routerLink="/account/signout">Sign Out</a>
-        <a mat-list-item>Consul Site</a>
-      </mat-nav-list>
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-      <mat-toolbar color="primary">
-        <button mat-icon-button (click)="start.open()">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <button mat-icon-button class="fill-remaining-space">
-          <mat-icon>home</mat-icon>
-        </button>
-        <!--<mat-toolbar-row>
-
-        </mat-toolbar-row>
-        <mat-toolbar-row >
-
-        </mat-toolbar-row>-->
-      </mat-toolbar>
-
-      <div class="app-content">
-        <router-outlet>
-          <!--<form>-->
-          
-
-
-          <!--</form>-->
-          <!--<br />
-          <button mat-button (click)="getkeys()">Get Consul Keys</button>
-          <br />
-          <button mat-button (click)="update(value)">Update</button>
-          <br />
-          <div>
-            <mat-nav-list>
-              <a mat-list-item *ngFor="let key of keys" (click)="getvalue(key)"> {{ key }} </a>
-            </mat-nav-list>
-          </div>-->
-        </router-outlet>
-
-      </div>
-    </mat-sidenav-content>
-
-  </mat-sidenav-container>
-  
-</div>
-
-<div id="footer" style="text-align:center">
-  <a>Here are some links to help you start: </a><br />
-  <a target="_blank" rel="noopener" href="https://angular.io/tutorial">"Tour of Heroes"</a>
-  <a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">"CLI Documentation"</a>
-  <a target="_blank" rel="noopener" href="https://blog.angular.io/">"Angular Blog"</a>
-  <a target="_blank" rel="noopener" href="https://material.angular.io/">"Material Design"</a>
-</div>
-

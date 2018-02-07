@@ -1,11 +1,11 @@
 ﻿{
   "ReRoutes": [
     {
-      "DownstreamPathTemplate": "/demo{everything}",
+      "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "http",
       "DownstreamPort": 5002,
       "DownstreamHost": "localhost",
-      "UpstreamPathTemplate": "/demo{everything}",
+      "UpstreamPathTemplate": "/demo/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete" ],
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
