@@ -36,10 +36,9 @@ export class AuthenticationService {
   public logout() {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    //this._router.navigate(['login']);
   }
 
-  public login(username, password) {
+  public login(username, password): Observable<any> {
      //event.preventDefault();
      //let body = JSON.stringify({ username, password });
     let contentHeaders = new HttpHeaders();
@@ -47,20 +46,17 @@ export class AuthenticationService {
     contentHeaders = contentHeaders.set('Content-Type', 'application/x-www-form-urlencoded; charset=utf-8');
 
     let body = `grant_type=password&client_id=AngularSPA&scope=openid+offline_access+WebAPI+profile+roles&username=${username}&password=${password}`;
-    this.http.post("connect/token", body, { headers: contentHeaders })
-       .subscribe((response) => {
-           //response.access_token
-          localStorage.setItem("access_token", response['access_token']);
-          localStorage.setItem("refresh_token", response['refresh_token']);
-          //this._router.navigate(['home']);
-          //this._user.next(null);
-          this.scheduleRefresh();
-          this.getUserInfo();
-        },
-        (error: HttpErrorResponse) => {
-           //console.log(error.message);
-        }
-      );
+    return this.http.post("connect/token", body, { headers: contentHeaders })
+      .pipe(
+      map((response) => {
+        localStorage.setItem("access_token", response['access_token']);
+        localStorage.setItem("refresh_token", response['refresh_token']);
+        //this._user.next(null);
+        this.scheduleRefresh();
+      }),
+      catchError((error: HttpErrorResponse) => {
+        return _throw(error);
+      }));  
    }
 
 
@@ -71,19 +67,15 @@ export class AuthenticationService {
       //this._router.navigate(['login']);
       return false;
     }
-    
-    
     if (this.jwtHelper.isTokenExpired(token)) {
       return false;
     }
     return true;
-    
   }
 
   public getUserToken() {
-    if (localStorage.getItem('access_token') === null) {
+    if (this.checkCredentials()) {
       console.log('please login');
-      //this._router.navigate(['users/login']);
     } else {
       return localStorage.getItem('access_token');
     }
@@ -107,8 +99,11 @@ export class AuthenticationService {
         let refresh_token = localStorage.getItem('refresh_token')
         let body = `grant_type=refresh_token&refresh_token=${refresh_token}&client_id=AngularSPA`
           this.http.post("connect/token", body, { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' }) }).subscribe(
-          (response) => { },
-          (error) => { }
+            (response) => {
+              localStorage.setItem("access_token", response['access_token']);
+              localStorage.setItem("refresh_token", response['refresh_token']);
+            },
+            (error) => { }
         );
       });
     }
@@ -119,22 +114,22 @@ export class AuthenticationService {
       this.refreshSubscription.unsubscribe();
     }
   }
-  private calcDelay(time: number): number {
-    let delay: number = 5;
-    if (this.checkCredentials()) {
-      let token = localStorage.getItem('access_token');
-      const expiresAt: number = this.jwtHelper.getTokenExpirationDate(token).getTime();
-      delay = expiresAt - time - this.offsetSeconds * 1000;
-    }
-    return delay > 0 ? delay : 0;
-  }
+  //private calcDelay(time: number): number {
+  //  let delay: number = 5;
+  //  if (this.checkCredentials()) {
+  //    let token = localStorage.getItem('access_token');
+  //    const expiresAt: number = this.jwtHelper.getTokenExpirationDate(token).getTime();
+  //    delay = expiresAt - time - this.offsetSeconds * 1000;
+  //  }
+  //  return delay > 0 ? delay : 0;
+  //}
 
-  private getAuthTime(): number {
-    let token = localStorage.getItem('access_token');
+  //private getAuthTime(): number {
+  //  let token = localStorage.getItem('access_token');
     
-    return this.jwtHelper.decodeToken(token).auth_time;
-    //return parseInt(localStorage.getItem('access_token'), 10);
-  }
+  //  return this.jwtHelper.decodeToken(token).auth_time;
+  //  //return parseInt(localStorage.getItem('access_token'), 10);
+  //}
   /**
    * *********
    */
@@ -156,17 +151,17 @@ export class AuthenticationService {
   public userChanged(): Observable<User> {
     return this._user.asObservable();
   }
-  public getUserInfo() {
+  public getUserInfo(): Observable<any> {
     if (this._user.value["userName"] == null) {
-        this.http.get("connect/userinfo", { headers: new HttpHeaders({ 'Accept': 'application/json' }) }).subscribe(
-          (user: User) => {
-            this._user.next(user)
-            return this._user.value;
-          },
-          (error: HttpErrorResponse) => { console.log(error.message); }
-      );
-      
-    }
-    
+      return this.http.get("connect/userinfo", { headers: new HttpHeaders({ 'Accept': 'application/json' }) })
+      .pipe(
+        map((user: User) => {
+          this._user.next(user)
+          return this._user.value;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return _throw(error);
+        }));      
+    }    
   }
 }

@@ -22,10 +22,7 @@ export class SignupComponent implements OnInit {
     this.authenticationService.register(this.model)
       .subscribe(
       (res: any) => {
-        // IdentityResult.
-        if (res.succeeded) {
-          // Signs in the user.
-          //this.signin();
+         if (res.succeeded) {
         } else {
           this.errorMessages = res.errors;
         }
@@ -36,6 +33,10 @@ export class SignupComponent implements OnInit {
         console.log(errMsg);
         this.errorMessages.push({ description: "Server error. Try later." });
       });
+  }
+
+  clearMessages(): void {
+    this.errorMessages = [];
   }
 
 }

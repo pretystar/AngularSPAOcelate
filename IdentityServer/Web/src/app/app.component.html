@@ -29,10 +29,10 @@
 
           <span class="stretch"></span>
 
-          <a *ngIf="_user">
+          <a *ngIf="signedin">
             Welcome {{ _user['given_name'] }}!
           </a>
-          <a mat-button routerLink="/account/signin" *ngIf="!!_user">Sign In</a>
+          <a mat-button routerLink="/account/signin" *ngIf="!signedin">Sign In</a>
           <a mat-button routerLink="/account/signup" *ngIf="!!_user">Sign Up</a>
           <a mat-button routerLink="/account/signout" *ngIf="_user">Sign Out</a>
 

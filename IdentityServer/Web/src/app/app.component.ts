@@ -30,6 +30,15 @@ export class AppComponent implements OnInit {
 
   }
 
+  public signedin() {
+    if (this._user) {
+      return true;
+    }
+    else {
+      return false
+    }
+  }
+
   
 
 
