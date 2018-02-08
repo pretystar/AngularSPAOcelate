@@ -5,6 +5,7 @@ import { AuthenticationService } from './user.AuthenticationService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit {
       (user: User) => {
         this._user = user;
       });
+    this.authenticationService.scheduleRefresh();
     if (this.authenticationService.checkCredentials()) {
       this.authenticationService.getUserInfo();
     };

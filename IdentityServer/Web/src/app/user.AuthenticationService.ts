@@ -6,6 +6,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { interval } from 'rxjs/observable/interval';
+import { map, catchError } from 'rxjs/operators';
+import { _throw } from 'rxjs/observable/throw';
+
 import { AuthHttp, JwtHelper } from 'angular2-jwt';
 
 
@@ -27,8 +30,8 @@ export class AuthenticationService {
   /**
  * Offset for the scheduling to avoid the inconsistency of data on the client.
  */
-  private offsetSeconds: number = 30;
-
+  private offsetSeconds: number = 300;
+  private jwtHelper: JwtHelper = new JwtHelper();
 
   public logout() {
     localStorage.removeItem('access_token');
@@ -51,6 +54,7 @@ export class AuthenticationService {
           localStorage.setItem("refresh_token", response['refresh_token']);
           //this._router.navigate(['home']);
           //this._user.next(null);
+          this.scheduleRefresh();
           this.getUserInfo();
         },
         (error: HttpErrorResponse) => {
@@ -67,9 +71,9 @@ export class AuthenticationService {
       //this._router.navigate(['login']);
       return false;
     }
-    let jwtHelper: JwtHelper = new JwtHelper();
     
-    if (jwtHelper.isTokenExpired(token)) {
+    
+    if (this.jwtHelper.isTokenExpired(token)) {
       return false;
     }
     return true;
@@ -89,52 +93,72 @@ export class AuthenticationService {
      * Strategy for refresh token through a scheduler.
      * Will schedule a refresh at the appropriate time.
      */
-  //public scheduleRefresh(): void {
-  //  const source: Observable<number> = interval(
-  //    this.calcDelay(this.getAuthTime())
-  //  );
+  public scheduleRefresh(): void {
+    //const source: Observable<number> = interval(
+    //  this.calcDelay(this.getAuthTime())
+    //);
+    if (this.checkCredentials()) {
+      const source: Observable<number> = interval(
+        this.offsetSeconds * 1000
+      );
 
-  //  this.refreshSubscription = source.subscribe(() => {
-  //    this.http.post("", "").subscribe(
-  //      (response) => { },
-  //      (error) => { }
-  //    );
-  //  });
-  //}
+      this.refreshSubscription = source.subscribe(() => {
+        console.log('refresh token');
+        let refresh_token = localStorage.getItem('refresh_token')
+        let body = `grant_type=refresh_token&refresh_token=${refresh_token}&client_id=AngularSPA`
+          this.http.post("connect/token", body, { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' }) }).subscribe(
+          (response) => { },
+          (error) => { }
+        );
+      });
+    }
+  }
 
   private unscheduleRefresh(): void {
     if (this.refreshSubscription) {
       this.refreshSubscription.unsubscribe();
     }
   }
-  //private calcDelay(time: number): number {
-  //  let jwtHelper: JwtHelper = new JwtHelper();
-  //  if (this.checkCredentials()) {
-  //    let token = localStorage.getItem('access_token');
-  //    const expiresAt: number = jwtHelper.getTokenExpirationDate(token);
-  //    const delay: number = expiresAt - time - this.offsetSeconds * 1000;
-  //    return delay > 0 ? delay : 0;
-  //  }
+  private calcDelay(time: number): number {
+    let delay: number = 5;
+    if (this.checkCredentials()) {
+      let token = localStorage.getItem('access_token');
+      const expiresAt: number = this.jwtHelper.getTokenExpirationDate(token).getTime();
+      delay = expiresAt - time - this.offsetSeconds * 1000;
+    }
+    return delay > 0 ? delay : 0;
+  }
 
-  //}
-
-  //private getAuthTime(): number {
-  //  return parseInt(localStorage.getItem('access_token_stored_at'), 10);
-  //}
+  private getAuthTime(): number {
+    let token = localStorage.getItem('access_token');
+    
+    return this.jwtHelper.decodeToken(token).auth_time;
+    //return parseInt(localStorage.getItem('access_token'), 10);
+  }
   /**
    * *********
    */
-  public register() {
+  public register(model: any): Observable<any> {
+    const body: string = JSON.stringify(model);
 
+    // Sends an authenticated request.
+    return this.http.post("/api/identity/Create", body, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
+    }).pipe(
+      map((response: Response) => {
+        return response;
+      }),
+      catchError((error: any) => {
+        return _throw(error);
+      }));
   }
+
   public userChanged(): Observable<User> {
     return this._user.asObservable();
   }
   public getUserInfo() {
     if (this._user.value["userName"] == null) {
-        let contentHeaders1 = new HttpHeaders({ 'Accept': 'application/json' });
-
-        this.http.get("connect/userinfo", { headers: contentHeaders1 }).subscribe(
+        this.http.get("connect/userinfo", { headers: new HttpHeaders({ 'Accept': 'application/json' }) }).subscribe(
           (user: User) => {
             this._user.next(user)
             return this._user.value;

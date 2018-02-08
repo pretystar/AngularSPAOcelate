@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Web\src\app\home.component.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
@@ -32,6 +36,10 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="Web\src\app\home.component.ts" />
   </ItemGroup>
 
   <ItemGroup>

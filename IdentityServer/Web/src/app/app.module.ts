@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from '../shared/shared.module'
 
+
 import { AuthenticationService } from './user.AuthenticationService';
 import { AuthInterceptor } from './AuthInterceptor';
 
@@ -22,7 +23,7 @@ import { HomeComponent } from './home.component';
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule,
-    AppRoutingModule,
+    AppRoutingModule
   ],
   providers: [
     AuthenticationService,

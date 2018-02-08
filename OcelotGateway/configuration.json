@@ -13,7 +13,7 @@
         "TimeoutValue": 5000
       },
       "HttpHandlerOptions": {
-        "AllowAutoRedirect": false,
+        "AllowAutoRedirect": true,
         "UseCookieContainer": false
       },
       "AuthenticationOptions": {
