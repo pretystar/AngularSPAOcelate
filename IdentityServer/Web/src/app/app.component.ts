@@ -4,6 +4,7 @@ import { SharedModule } from '../shared/shared.module'
 import { AuthenticationService } from './user.AuthenticationService';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
+import { Subject } from 'rxjs/Subject';
 
 
 @Component({
@@ -16,12 +17,12 @@ export class AppComponent implements OnInit {
   constructor(private authenticationService: AuthenticationService, private http: HttpClient) { }
 
   title = 'app';
-  public _user: User;
+  public userObservable = new Subject<User>();
 
   ngOnInit() {
     this.authenticationService.userChanged().subscribe(
       (user: User) => {
-        this._user = user;
+        this.userObservable.next(user)
       });
     this.authenticationService.scheduleRefresh();
     if (this.authenticationService.checkCredentials()) {
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   public signedin() {
-    if (this._user) {
+    if (this.userObservable) {
       return true;
     }
     else {
@@ -39,7 +40,9 @@ export class AppComponent implements OnInit {
     }
   }
 
-  
+  public signout() {
+    this.authenticationService.logout();
+  }
 
 
 

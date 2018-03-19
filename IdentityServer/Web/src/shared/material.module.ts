@@ -31,6 +31,7 @@ import {
     MatToolbarModule,
     MatTooltipModule,
     MatStepperModule
+    
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -70,7 +71,7 @@ const materialModules: any[] = [
     FormsModule,
     ReactiveFormsModule,
     CdkTableModule,
-    FlexLayoutModule
+  FlexLayoutModule
 ];
 
 @NgModule({

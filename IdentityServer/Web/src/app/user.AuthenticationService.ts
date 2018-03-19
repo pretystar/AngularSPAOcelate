@@ -151,17 +151,28 @@ export class AuthenticationService {
   public userChanged(): Observable<User> {
     return this._user.asObservable();
   }
-  public getUserInfo(): Observable<any> {
+  public getUserInfo() {
     if (this._user.value["userName"] == null) {
-      return this.http.get("connect/userinfo", { headers: new HttpHeaders({ 'Accept': 'application/json' }) })
-      .pipe(
-        map((user: User) => {
-          this._user.next(user)
-          return this._user.value;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          return _throw(error);
-        }));      
-    }    
+      this.http.get<User>("connect/userinfo", { headers: new HttpHeaders({ 'Accept': 'application/json' }) })
+      //  .pipe(
+      //  map((user: User) => {
+      //    console.log("map");
+      //    console.log(user);
+      //      this._user.next(user)
+      //      //this._user.value;
+      //    }),
+      //    catchError((error: HttpErrorResponse) => {
+      //      return _throw(error);
+      //    })
+      //)
+        .subscribe(
+        user => {
+            console.log("subscribe");
+            console.log(user);
+            this._user.next(user);
+        },
+        (error) => { }
+        );      
+    }
   }
 }

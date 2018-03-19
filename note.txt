@@ -1,7 +1,8 @@
 1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
 2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
-
+http://localhost:5001/index.html
 ng build --output-path ..\wwwroot
+ng build --output-path ..\wwwroot --watch
 ng new Web
 
 for new project

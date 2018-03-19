@@ -1,0 +1,30 @@
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+
+
+    <ng-container matColumnDef="userName">
+      <mat-header-cell *matHeaderCellDef> userName </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.userName}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="givenName">
+      <mat-header-cell *matHeaderCellDef> givenName </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.givenName}} </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="familyName">
+      <mat-header-cell *matHeaderCellDef> familyName </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.familyName}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator
+                 [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]"
+                 [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

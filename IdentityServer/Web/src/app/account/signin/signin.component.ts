@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module'
 import { AuthenticationService } from '../../user.AuthenticationService';
-import { Route } from '@angular/router';
+//import { Route } from '@angular/router';
 
 @Component({
   selector: 'account-signin',
@@ -14,16 +14,18 @@ export class SigninComponent implements OnInit {
 
   password = 'Admin01*';
 
-  constructor(private authenticationService: AuthenticationService, private route: Route) { }
-
+  //constructor(private authenticationService: AuthenticationService, private route: Route) { }
+  constructor(private authenticationService: AuthenticationService) { }
   ngOnInit() {
   }
 
   login() {
     this.authenticationService.login(this.username, this.password).subscribe(
-      (response) => { this.authenticationService.getUserInfo() },
+      (response) => {
+        this.authenticationService.getUserInfo();
+      },
       (error) => { }
     );
-    this.route.navigate("/home");
+    //this.route.redirectTo('/home');
   }
 }
