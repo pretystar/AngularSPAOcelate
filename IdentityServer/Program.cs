@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AngularSPAWebAPI.Data;
 using AngularSPAWebAPI.Services;
@@ -17,7 +18,9 @@ namespace AngularSPAWebAPI
     {
         public static void Main(string[] args)
         {
-            var host = BuildWebHost(args);
+            var host = WebHost.CreateDefaultBuilder(args)
+                .UseStartup<Startup>()
+                .Build();
 
             // Initializes db.
             using (var scope = host.Services.CreateScope())
@@ -37,11 +40,9 @@ namespace AngularSPAWebAPI
             }
 
             host.Run();
-        }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>()
-                .Build();
+
+            
+        }
     }
 }

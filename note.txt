@@ -1,3 +1,13 @@
+Roadmap:
+1. consul integration
+2. dockerlized
+3. k8s
+Feature:
+1. User management
+2. Role management
+3. backend integration (consul)
+
+
 1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
 2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
 http://localhost:5001/index.html
@@ -18,3 +28,8 @@ for bug fix:
 	npm install @angular-devkit/core --save
 	--npm install @angular-devkit/schematics --save
 	--npm install @schematics/angular --save
+
+Port:
+	Ocelot:50001
+	identityserver: 5000
+	Demobapi:5002

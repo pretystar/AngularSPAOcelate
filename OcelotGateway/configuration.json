@@ -10,7 +10,7 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
         "DurationOfBreak": 10,
-        "TimeoutValue": 5000
+        "TimeoutValue": 10000
       },
       "HttpHandlerOptions": {
         "AllowAutoRedirect": true,
@@ -24,33 +24,19 @@
       }
     },
     {
-      "DownstreamPathTemplate": "/api/values",
-      "DownstreamScheme": "http",
-      "DownstreamPort": 5000,
-      "DownstreamHost": "localhost",
-      "UpstreamPathTemplate": "/api/values",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 3,
-        "DurationOfBreak": 10,
-        "TimeoutValue": 5000
-      },
-      "HttpHandlerOptions": {
-        "AllowAutoRedirect": false,
-        "UseCookieContainer": false
-      },
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
-      }
-    },
-    {
       "DownstreamPathTemplate": "/{everything}",
       "DownstreamScheme": "http",
-      "DownstreamPort": 5000,
-      "DownstreamHost": "localhost",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
       "UpstreamPathTemplate": "/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
+      "ServiceName": "IdentityServer",
+      "LoadBalancer": "RoundRobin",
+      "UseServiceDiscovery": true,
       "HttpHandlerOptions": {
         "AllowAutoRedirect": true,
         "UseCookieContainer": false
@@ -58,10 +44,21 @@
       "QoSOptions": {
         "ExceptionsAllowedBeforeBreaking": 3,
         "DurationOfBreak": 10,
-        "TimeoutValue": 5000
+        "TimeoutValue": 10000
       },
       "AuthenticationOptions": {
       }
     }
-  ]
+  ],
+    "GlobalConfiguration":{
+      "ServiceDiscoveryProvider": {
+        "Host": "localhost",
+        "Port": 8500
+      },
+      "RateLimitOptions": {
+        "ClientIdHeader": "client_id",
+        "QuotaExceededMessage": "Too Many Requests!!!",
+        "DisableRateLimitHeaders": false
+      }
+    }
 }

@@ -14,20 +14,59 @@ using Microsoft.Extensions.DependencyInjection;
 using IdentityServer4.EntityFramework.DbContexts;
 using System.Reflection;
 using IdentityServer4.EntityFramework.Mappers;
+using Consul;
 
 namespace AngularSPAWebAPI
 {
     public class Startup
     {
         private readonly IHostingEnvironment currentEnvironment;
-
+        private string name = Assembly.GetEntryAssembly().GetName().Name;
+        private int port = 5000;
+        private string id {
+            get {
+                return name + ":" + port;
+            }
+        }
+        private ConsulClient client = new ConsulClient();
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
             currentEnvironment = env;
+            
+
+
+
+            var tcpCheck = new AgentServiceCheck()
+            {
+                DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
+                Interval = TimeSpan.FromSeconds(30),
+                TCP = $"127.0.0.1:{port}"
+            };
+
+            var httpCheck = new AgentServiceCheck()
+            {
+                DeregisterCriticalServiceAfter = TimeSpan.FromMinutes(1),
+                Interval = TimeSpan.FromSeconds(30),
+                HTTP = $"http://127.0.0.1:{port}/"
+            };
+
+            var registration = new AgentServiceRegistration()
+            {
+                Checks = new[] { tcpCheck, httpCheck },
+                Address = "127.0.0.1",
+                ID = id,
+                Name = name,
+                Port = port
+            };
+
+            client.Agent.ServiceRegister(registration).GetAwaiter().GetResult();
+
+
         }
 
-        public IConfiguration Configuration { get; }
+        
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -215,5 +254,9 @@ namespace AngularSPAWebAPI
             }
         }
 
+        private void OnShutdown()
+        {
+            client.Agent.ServiceDeregister(id).GetAwaiter().GetResult();
+        }
     }
 }
