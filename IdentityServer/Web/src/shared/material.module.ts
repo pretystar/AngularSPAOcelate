@@ -71,7 +71,7 @@ const materialModules: any[] = [
     FormsModule,
     ReactiveFormsModule,
     CdkTableModule,
-  FlexLayoutModule
+    FlexLayoutModule
 ];
 
 @NgModule({

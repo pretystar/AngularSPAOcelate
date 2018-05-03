@@ -7,12 +7,14 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '../AuthInterceptor';
 import { UsermanagerroutingModule } from './usermanagerrouting.module';
 
-import { UsermanagerComponent } from './usermanager/usermanager.component'
+//import { UsermanagerComponent } from './usermanager/usermanager.component'
+import { TableHttpExample } from './usermanager/table-http-example'
 
 @NgModule({
   imports: [
     CommonModule,
-    UsermanagerroutingModule
+    UsermanagerroutingModule,
+    SharedModule
   ],
   providers: [
     AuthenticationService,
@@ -23,8 +25,9 @@ import { UsermanagerComponent } from './usermanager/usermanager.component'
     }
   ],
   declarations: [
-    UsermanagerComponent
+    //UsermanagerComponent,
+    TableHttpExample
   ],
-  bootstrap: [UsermanagerComponent]
+  bootstrap: [TableHttpExample]
 })
 export class UsermanagerModule { }

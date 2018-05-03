@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../../shared/shared.module'
+//import { SharedModule } from '../../../shared/shared.module'
 import { AuthenticationService } from '../../user.AuthenticationService';
 //import { Route } from '@angular/router';
 

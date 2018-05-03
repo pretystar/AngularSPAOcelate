@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { UsermanagerComponent } from './usermanager/usermanager.component'
+//import { UsermanagerComponent } from './usermanager/usermanager.component'
+import { TableHttpExample } from './usermanager/table-http-example'
 
 const routes: Routes = [
-  { path: '', redirectTo: '/usermanager', pathMatch: 'full' },
+  { path: '', redirectTo: '/table', pathMatch: 'full' },
   //{ path: 'Usermanager', redirectTo: '/home', pathMatch: 'full' },
   // { path: 'home', loadChildren: "./home/home.component" },
-  { path: 'usermanager', component: UsermanagerComponent },
+  //{ path: 'usermanager', component: UsermanagerComponent },
+  { path: 'table', component: TableHttpExample },
   //{ path: 'signup', component: SignupComponent },
 
 ];

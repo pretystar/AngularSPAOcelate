@@ -54,7 +54,8 @@ namespace AngularSPAWebAPI
 
             var registration = new AgentServiceRegistration()
             {
-                Checks = new[] { tcpCheck, httpCheck },
+                //Checks = new[] { tcpCheck, httpCheck },
+                Checks = new[] { tcpCheck },
                 Address = "127.0.0.1",
                 ID = id,
                 Name = name,

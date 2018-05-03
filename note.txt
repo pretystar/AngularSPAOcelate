@@ -7,17 +7,18 @@ Feature:
 2. Role management
 3. backend integration (consul)
 
+cd tools\consul
+consul.exe agent -data-dir=data -ui-dir=web_ui -dev
 
 1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
 2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
-http://localhost:5001/index.html
-ng build --output-path ..\wwwroot
-ng build --output-path ..\wwwroot --watch
+
+ng build --output-path ..\wwwroot --aot
+ng build --output-path ..\wwwroot --watch --aot
 ng new Web
 
 for new project
 frontend:
-	
 	copy shared+AuthInterceptor.ts
 	npm install --save @angular/material @angular/cdk
 	npm install --save @angular/animations
@@ -26,10 +27,12 @@ frontend:
 	npm install @angular/flex-layout --save
 for bug fix:
 	npm install @angular-devkit/core --save
-	--npm install @angular-devkit/schematics --save
-	--npm install @schematics/angular --save
+	npm install @angular-devkit/schematics --save
+	npm install @schematics/angular --save
+	npm update --save
 
 Port:
-	Ocelot:50001
+	Ocelot:5001
+		http://localhost:5001/index.html
 	identityserver: 5000
 	Demobapi:5002

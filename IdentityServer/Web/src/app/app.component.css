@@ -4,6 +4,6 @@
   flex: 1 1 auto;
 }
 .app-root {
-  height: -webkit-fill-available;
+  /*height: -webkit-stretch;*/
   text-align: center
 }
