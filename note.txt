@@ -36,3 +36,16 @@ Port:
 		http://localhost:5001/index.html
 	identityserver: 5000
 	Demobapi:5002
+
+===========
+1. 
+@NgModule({
+  imports: [
+    SharedModule,
+    AccountRoutingModule,
+    //BrowserModule,
+    //BrowserAnimationsModule
+  ],
+  ...
+
+2.
