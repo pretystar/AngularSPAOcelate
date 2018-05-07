@@ -142,19 +142,19 @@ namespace AngularSPAWebAPI
 
                 
 
-            if (currentEnvironment.IsProduction())
-            {
-                services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                    .AddIdentityServerAuthentication(options =>
-                    {
-                        options.Authority = "http://angularspawebapi.azurewebsites.net/";
-                        options.RequireHttpsMetadata = false;
+            // if (currentEnvironment.IsProduction())
+            // {
+            //     services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+            //         .AddIdentityServerAuthentication(options =>
+            //         {
+            //             options.Authority = "http://angularspawebapi.azurewebsites.net/";
+            //             options.RequireHttpsMetadata = false;
 
-                        options.ApiName = "WebAPI";
-                    });
-            }
-            else
-            {
+            //             options.ApiName = "WebAPI";
+            //         });
+            // }
+            // else
+            // {
                 services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                     .AddIdentityServerAuthentication(options =>
                     {
@@ -163,7 +163,7 @@ namespace AngularSPAWebAPI
 
                         options.ApiName = "WebAPI";
                     });
-            }
+            // }
 
             services.AddMvc();
 
@@ -223,7 +223,7 @@ namespace AngularSPAWebAPI
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 serviceScope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-
+                serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
                 var context = serviceScope.ServiceProvider.GetRequiredService<ConfigurationDbContext>();
                 context.Database.Migrate();
                 if (!context.Clients.Any())

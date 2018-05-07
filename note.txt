@@ -6,12 +6,17 @@ Feature:
 1. User management
 2. Role management
 3. backend integration (consul)
-
+==========
+dotnet ef migrations add InitialIdentityServerPersistedGrantDbMigration -c PersistedGrantDbContext -o Data/Migrations/IdentityServer/PersistedGrantDb
+dotnet ef migrations add InitialIdentityServerConfigurationDbMigration -c ConfigurationDbContext -o Data/Migrations/IdentityServer/ConfigurationDb
+dotnet ef migrations add CreateIdentity -c ApplicationDbContext -o Data/Migrations
+Generate db:
+cd identityserver
+dotnet ef database update
+==========
 cd tools\consul
 consul.exe agent -data-dir=data -ui-dir=web_ui -dev
 
-1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
-2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
 
 ng build --output-path ..\wwwroot --aot
 ng build --output-path ..\wwwroot --watch --aot
@@ -38,7 +43,9 @@ Port:
 	Demobapi:5002
 
 ===========
-1. 
+1. Import BrowserModule, BrowserAnimationsModule and HttpModule only once (either in your root module or a core module).
+2. Only once: RouterModule.forRoot(routes); RouterModule.forChild(routes)
+3. 
 @NgModule({
   imports: [
     SharedModule,
@@ -47,5 +54,5 @@ Port:
     //BrowserAnimationsModule
   ],
   ...
-
-2.
+4. Not work: dotnet ef database update --context ApplicationDbContext
+5. 
