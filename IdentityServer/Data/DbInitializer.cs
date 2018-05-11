@@ -43,7 +43,7 @@ namespace AngularSPAWebAPI.Services
                 FamilyName = "Admin",
                 AccessFailedCount = 0,
                 Email = "admin@gmail.com",
-                EmailConfirmed = false,
+                EmailConfirmed = true,
                 LockoutEnabled = true,
                 NormalizedEmail = "ADMIN@GMAIL.COM",
                 NormalizedUserName = "ADMIN@GMAIL.COM",

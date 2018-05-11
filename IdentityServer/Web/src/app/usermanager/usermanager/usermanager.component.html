@@ -18,6 +18,29 @@
       <mat-cell *matCellDef="let element"> {{element.familyName}} </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="emailConfirmed">
+      <mat-header-cell *matHeaderCellDef> emailConfirmed </mat-header-cell>
+      <mat-cell *matCellDef="let element"> 
+            <mat-checkbox [(ngModel)]="element.emailConfirmed"></mat-checkbox> 
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lockoutEnabled">
+      <mat-header-cell *matHeaderCellDef> lockoutEnabled </mat-header-cell>
+      <mat-cell *matCellDef="let element"> 
+        <mat-checkbox [(ngModel)]="element.lockoutEnabled"></mat-checkbox> 
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="buttons">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let element" (click)="$event.stopPropagation()">
+            <button mat-button (click)="onupdate(element)">
+                <mat-icon>update</mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>

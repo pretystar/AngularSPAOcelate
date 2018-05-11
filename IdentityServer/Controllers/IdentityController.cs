@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace AngularSPAWebAPI.Controllers
 {
@@ -51,8 +52,10 @@ namespace AngularSPAWebAPI.Controllers
         {
             var role = await _roleManager.FindByNameAsync("user");
             var users = await _userManager.GetUsersInRoleAsync(role.Name);
-
-            return new JsonResult(users);
+            var us =
+                from u in users
+                select new { u.UserName, u.GivenName, u.FamilyName, u.LockoutEnabled, u.EmailConfirmed };
+            return new JsonResult(us);
         }
 
         /// <summary>
@@ -88,7 +91,27 @@ namespace AngularSPAWebAPI.Controllers
 
             return new JsonResult(result);
         }
+        /// <summary>
+        /// Update a new user.
+        /// </summary>
+        /// <returns>IdentityResult</returns>
+        // POST: api/identity/Update
+        [HttpPost("Update")]
+        public async Task<IActionResult> Update([FromBody]UpdateViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.username);
+            if(user!=null)
+            {
+                user.GivenName = model.givenName;
+                user.FamilyName = model.familyName;
+                user.EmailConfirmed = model.EmailConfirmed;
+                user.LockoutEnabled = model.LockoutEnabled;
+            }
 
+            var result = await _userManager.UpdateAsync(user);
+
+            return new JsonResult(result);
+        }
         /// <summary>
         /// Deletes a user.
         /// </summary>

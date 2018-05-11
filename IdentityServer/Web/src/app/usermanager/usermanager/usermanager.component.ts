@@ -22,6 +22,7 @@ import { switchMap } from 'rxjs/operators/switchMap';
 
 import { User } from '../../../models/user';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Component({
@@ -31,23 +32,27 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 })
 export class UsermanagerComponent implements OnInit, AfterViewInit {
 
-  private _users: User[];//Array<User>;
-  public dataSource = new MatTableDataSource(this._users);
+  //private _users: User[];//Array<User>;
+  private _users = new BehaviorSubject<Array<User>>(new Array<User>())
+  //public dataSource = new MatTableDataSource(this._users.value);
+  public dataSource = new MatTableDataSource();
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.http.get<User[]>("api/identity/getall", { headers: new HttpHeaders({ 'Accept': 'application/json' }) })
       .subscribe(
-      users => {
-        this._users = users;
-        this.dataSource.data = this._users;
-        //this.dataSource = new MatTableDataSource(this._users);
-      }
+        users => {
+          this._users.next(users);
+          this.dataSource.data = this._users.value;
+          //this.dataSource = new MatTableDataSource(this._users);
+
+          this._users.subscribe(value => console.log("userchanged:"+ value));
+        }
     );
   }
 
-  displayedColumns = ['userName','givenName', 'familyName'];
+  displayedColumns = ['userName','givenName', 'familyName','lockoutEnabled','emailConfirmed','buttons'];
   
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -58,6 +63,17 @@ export class UsermanagerComponent implements OnInit, AfterViewInit {
    */
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  onupdate(user){
+    console.log(user);
+    
+    this.http.post("api/identity/update",user, { headers: new HttpHeaders({ 'Accept': 'application/json' }) })
+    .subscribe(
+      result => {
+        console.log(result)
+      }
+    );
   }
 
 }
