@@ -3,6 +3,7 @@ Roadmap:
 2. dockerlized
 3. k8s
 Feature:
+1. MFA with email
 1. User management
 2. Role management
 3. backend integration (consul)

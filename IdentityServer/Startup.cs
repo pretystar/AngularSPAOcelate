@@ -15,6 +15,8 @@ using IdentityServer4.EntityFramework.DbContexts;
 using System.Reflection;
 using IdentityServer4.EntityFramework.Mappers;
 using Consul;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 
 namespace AngularSPAWebAPI
 {
@@ -76,24 +78,66 @@ namespace AngularSPAWebAPI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
+            // services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            //     {
+            //         // Password settings.
+            //         options.Password.RequireDigit = true;
+            //         options.Password.RequiredLength = 8;
+            //         options.Password.RequireNonAlphanumeric = false;
+            //         options.Password.RequireUppercase = true;
+            //         options.Password.RequireLowercase = false;
+            //         // Lockout settings.
+            //         options.Lockout.AllowedForNewUsers = true;
+            //         options.Lockout.MaxFailedAccessAttempts = 3;
+            //         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+            //     }
+            // )
+            //     .AddEntityFrameworkStores<ApplicationDbContext>()
+            //     .AddDefaultTokenProviders();
+            
             // Identity options.
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = false;
-                // Lockout settings.
-                options.Lockout.AllowedForNewUsers = true;
-                options.Lockout.MaxFailedAccessAttempts = 3;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
-            });
+            // services.Configure<IdentityOptions>(options =>
+            // {
+            //     // Password settings.
+            //     options.Password.RequireDigit = true;
+            //     options.Password.RequiredLength = 8;
+            //     options.Password.RequireNonAlphanumeric = false;
+            //     options.Password.RequireUppercase = true;
+            //     options.Password.RequireLowercase = false;
+            //     // Lockout settings.
+            //     options.Lockout.AllowedForNewUsers = true;
+            //     options.Lockout.MaxFailedAccessAttempts = 3;
+            //     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+            // });
+
+
+            IdentityBuilder builder = services.AddIdentityCore<IdentityUser>(options =>
+                {
+                    // Password settings.
+                    options.Password.RequireDigit = true;
+                    options.Password.RequiredLength = 8;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = true;
+                    options.Password.RequireLowercase = false;
+                    // Lockout settings.
+                    options.Lockout.AllowedForNewUsers = true;
+                    options.Lockout.MaxFailedAccessAttempts = 3;
+                    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(1);
+                }
+            );
+            //builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+
+            builder.AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.AddRoleValidator<RoleValidator<IdentityRole>>();
+            builder.AddRoleManager<RoleManager<IdentityRole>>();
+            builder.AddSignInManager<SignInManager<IdentityUser>>();
+            //builder.AddUserManager<UserManager<ApplicationUser>>();
+            builder.AddDefaultTokenProviders();
+            builder.AddUserStore<ApplicationUser>();
+            builder.AddClaimsPrincipalFactory<ApplicationUser>();
+            //services.AddScoped<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
+            //services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, UserClaimsPrincipalFactory<ApplicationUser>>();
+            //services.AddScoped<UserManager<ApplicationUser>>();
 
             // Role based Authorization: policy based role checks.
             services.AddAuthorization(options =>
@@ -124,15 +168,15 @@ namespace AngularSPAWebAPI
                 //.AddInMemoryClients(Config.GetClients())
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString,
+                    options.ConfigureDbContext = obuilder =>
+                        obuilder.UseSqlServer(connectionString,
                             sql => sql.MigrationsAssembly(migrationsAssembly));
                 })
                 // this adds the operational data from DB (codes, tokens, consents)
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = builder =>
-                        builder.UseSqlServer(connectionString,
+                    options.ConfigureDbContext = obuilder =>
+                        obuilder.UseSqlServer(connectionString,
                             sql => sql.MigrationsAssembly(migrationsAssembly));
 
                     // this enables automatic token cleanup. this is optional.
@@ -144,26 +188,19 @@ namespace AngularSPAWebAPI
 
             // if (currentEnvironment.IsProduction())
             // {
-            //     services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-            //         .AddIdentityServerAuthentication(options =>
-            //         {
-            //             options.Authority = "http://angularspawebapi.azurewebsites.net/";
-            //             options.RequireHttpsMetadata = false;
-
-            //             options.ApiName = "WebAPI";
-            //         });
-            // }
             // else
             // {
-                services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                    .AddIdentityServerAuthentication(options =>
-                    {
-                        options.Authority = "http://localhost:5000/";
-                        options.RequireHttpsMetadata = false;
-
-                        options.ApiName = "WebAPI";
-                    });
             // }
+            /////////AddAuthentication will send cookie, replace with AddIdentityCore
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "http://localhost:5000/";
+                    options.RequireHttpsMetadata = false;
+
+                    options.ApiName = "WebAPI";
+                });
+            
 
             services.AddMvc();
 
@@ -204,7 +241,8 @@ namespace AngularSPAWebAPI
 
             app.UseIdentityServer();
             app.UseCors(builder =>
-                builder.WithOrigins("http://localhost:50001")
+                builder
+                .WithOrigins("http://localhost:5001")
                 .AllowAnyHeader()
             );
             app.UseMvc();

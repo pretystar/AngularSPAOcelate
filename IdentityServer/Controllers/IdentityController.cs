@@ -50,6 +50,7 @@ namespace AngularSPAWebAPI.Controllers
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
+            _logger.LogWarning(new EventId(199,"GetAllIdentity"),"Get All started");
             var role = await _roleManager.FindByNameAsync("user");
             var users = await _userManager.GetUsersInRoleAsync(role.Name);
             var us =
@@ -57,7 +58,23 @@ namespace AngularSPAWebAPI.Controllers
                 select new { u.UserName, u.GivenName, u.FamilyName, u.LockoutEnabled, u.EmailConfirmed };
             return new JsonResult(us);
         }
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody]CreateViewModel model)
+        {
+            var user = await _userManager.FindByNameAsync(model.username);
+            if (user == null)
+            {
+                return BadRequest("Invalid credentials");
+            }
 
+            var result = await _signInManager.CheckPasswordSignInAsync(user, model.password, true);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Invalid credentials");
+            }
+            return new JsonResult(result);
+        }
         /// <summary>
         /// Registers a new user.
         /// </summary>
